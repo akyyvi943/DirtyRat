@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>權證小幫手</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background: #f0f4f8;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 30px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 150px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 20px;
+      color: #2d3436;
+    }
+  </style>
+</head>
+<body>
+  <h1>權證小幫手</h1>
+
+  <input type="number" id="leverage" placeholder="請輸入槓桿">
+  <input type="number" id="price" placeholder="請輸入價格">
+  <br>
+  <button onclick="calculate()">計算</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculate() {
+      const leverage = parseFloat(document.getElementById("leverage").value);
+      const price = parseFloat(document.getElementById("price").value);
+
+      if (isNaN(leverage) || isNaN(price) || leverage <= 0 || price <= 0) {
+        document.getElementById("output").innerHTML = "請輸入有效的槓桿與價格數值。";
+        return;
+      }
+
+      const quantity = (50000 / leverage) / (price * 1000);
+      const quantityRounded = Math.round(quantity * 100) / 100;
+      const quantityInt = Math.round(quantity);
+      const cost = quantityInt * price * 1000;
+
+      document.getElementById("output").innerHTML =
+        `可買張數為：${quantityRounded} 張<br>` +
+        `總成本為：${cost} 元（以整數張數 ${quantityInt} 計算）`;
+    }
+
+    // PWA Service Worker 註冊
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+          console.log('Service Worker 註冊成功:', registration);
+        })
+        .catch(function(error) {
+          console.log('Service Worker 註冊失敗:', error);
+        });
+    }
+  </script>
+</body>
+</html>

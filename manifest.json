@@ -1,0 +1,9 @@
+{
+  "short_name": "權證小幫手",
+  "name": "權證小幫手 - 計算槓桿與價格",
+  "description": "一個簡單的計算槓桿與價格的工具，計算可買張數與總成本。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3498db"
+}
